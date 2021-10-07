@@ -13,7 +13,7 @@
     "lint:fix": "eslint -c .eslintrc.js \"{server, test}/**/*.{js,ts,tsx}\" --quiet --fix",
     "test": "mocha --timeout=10000 -r ts-node/register test/**/*.ts --exit",
     "test:debug": "mocha --timeout=10000 -r ts-node/register --inspect-brk test/**/*.ts --exit",
-    "prepare": "husky install",
+    "husky-prepare": "husky install",
     "pre-commit": "npm run lint:fix && git add .",
     "pre-push": "npm run test"
   },
