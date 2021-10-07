@@ -1,0 +1,169 @@
+openapi: 3.0.1
+info:
+  title: Expense Tracker Api
+  description: Expense tracking api
+  version: 1.0.0
+servers:
+  - url: /api/v1
+tags:
+  - name: Sheets
+    description: Sheet management endpoints
+  - name: Specification
+    description: The swagger API specification
+paths:
+  /sheets/{sheetId}:
+    post:
+      summary: Create a row
+      tags:
+        - Sheets
+      description: This operation needs correct Sheet Id int he url
+      parameters:
+        - name: sheetId
+          in: path
+          required: true
+          description: Sheet id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: test
+                expense:
+                  type: integer
+                  example: 40
+      responses:
+        201:
+          description: Row created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseType"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    patch:
+      summary: Update a row
+      tags:
+        - Sheets
+      description: This operation needs correct Sheet Id int he url
+      parameters:
+        - name: sheetId
+          in: path
+          required: true
+          description: Sheet id
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 0
+                title:
+                  type: string
+                  example: test
+                expense:
+                  type: integer
+                  example: -40
+      responses:
+        200:
+          description: Row updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseType"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+    delete:
+      summary: Delete a row
+      tags:
+        - Sheets
+      description: This operation needs correct Sheet Id int he url
+      parameters:
+        - name: sheetId
+          in: path
+          required: true
+          description: Sheet id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 0
+      responses:
+        200:
+          description: Row deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResponseType"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+  /spec:
+    get:
+      tags:
+        - Specification
+      responses:
+        200:
+          description: Return the API specification
+          content: {}
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+components:
+  schemas:
+    InternalServerError:
+      title: Server Error
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+      example:
+        errors: [{ message: "Something went wrong." }]
+    ResponseType:
+      title: Response Type
+      type: object
+      properties:
+        result:
+          type: string
+        errors:
+          type: array
+          items:
+            type: string
+      example:
+        - { result: "Ok", errors: [] }
+        - { result: "", errors: ["Couldn't find the row"] }
