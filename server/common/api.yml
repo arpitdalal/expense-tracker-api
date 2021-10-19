@@ -25,7 +25,6 @@ paths:
           schema:
             type: string
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -35,21 +34,24 @@ paths:
                   type: string
                   example: test
                 expense:
-                  type: integer
+                  type: string
                   example: 40
+                resSheetName:
+                  type: string
+                  example: Sheet1
       responses:
         201:
           description: Row created
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseType"
+                $ref: '#/components/schemas/ResponseType'
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InternalServerError"
+                $ref: '#/components/schemas/InternalServerError'
     patch:
       summary: Update a row
       tags:
@@ -75,21 +77,24 @@ paths:
                   type: string
                   example: test
                 expense:
-                  type: integer
+                  type: string
                   example: -40
+                resSheetName:
+                  type: string
+                  example: Sheet1
       responses:
         200:
           description: Row updated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseType"
+                $ref: '#/components/schemas/ResponseType'
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InternalServerError"
+                $ref: '#/components/schemas/InternalServerError'
     delete:
       summary: Delete a row
       tags:
@@ -112,19 +117,22 @@ paths:
                 id:
                   type: integer
                   example: 0
+                resSheetName:
+                  type: string
+                  example: Sheet1
       responses:
         200:
           description: Row deleted
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResponseType"
+                $ref: '#/components/schemas/ResponseType'
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InternalServerError"
+                $ref: '#/components/schemas/InternalServerError'
   /spec:
     get:
       tags:
@@ -138,7 +146,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InternalServerError"
+                $ref: '#/components/schemas/InternalServerError'
 components:
   schemas:
     InternalServerError:
@@ -153,7 +161,7 @@ components:
               message:
                 type: string
       example:
-        errors: [{ message: "Something went wrong." }]
+        errors: [{ message: 'Something went wrong.' }]
     ResponseType:
       title: Response Type
       type: object
@@ -165,5 +173,5 @@ components:
           items:
             type: string
       example:
-        - { result: "Ok", errors: [] }
-        - { result: "", errors: ["Couldn't find the row"] }
+        - { result: 'Ok', errors: [] }
+        - { result: '', errors: ["Couldn't find the row"] }

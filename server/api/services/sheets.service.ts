@@ -11,11 +11,12 @@ export class SheetsService {
   async create(
     sheetId: string,
     title: string,
-    expense: number
+    expense: string,
+    resSheetName?: string
   ): Promise<ReturnObject> {
     const doc = await getSheetDoc(sheetId);
 
-    const { sheetName, ...data } = await getSheet(doc);
+    const { sheetName, ...data } = await getSheet(doc, resSheetName);
     let sheet = data.sheet;
 
     if (!sheet) {
@@ -38,11 +39,12 @@ export class SheetsService {
     sheetId: string,
     id: number,
     title?: string,
-    expense?: number
+    expense?: string,
+    resSheetName?: string
   ): Promise<ReturnObject> {
     const doc = await getSheetDoc(sheetId);
 
-    const { sheet } = await getSheet(doc);
+    const { sheet } = await getSheet(doc, resSheetName);
 
     if (!sheet) {
       return Promise.reject({
@@ -63,10 +65,14 @@ export class SheetsService {
     });
   }
 
-  async delete(sheetId: string, id: number): Promise<ReturnObject> {
+  async delete(
+    sheetId: string,
+    id: number,
+    resSheetName?: string
+  ): Promise<ReturnObject> {
     const doc = await getSheetDoc(sheetId);
 
-    const { sheet } = await getSheet(doc);
+    const { sheet } = await getSheet(doc, resSheetName);
 
     if (!sheet) {
       return Promise.reject({

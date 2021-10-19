@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import path from 'path';
 import http from 'http';
 import os from 'os';
+import cors, { CorsOptions } from 'cors';
 import * as OpenApiValidator from 'express-openapi-validator';
 
 import l from './logger';
@@ -12,6 +13,14 @@ const app = express();
 export default class ExpressServer {
   constructor() {
     const root = path.normalize(__dirname + '/../..');
+    const corsOptions: CorsOptions = {
+      origin: [
+        'http://localhost:3000',
+        process.env.NETLIFY_URL !== undefined && process.env.NETLIFY_URL,
+      ],
+      methods: ['POST', 'DELETE', 'PATCH'],
+    };
+    app.use(cors(corsOptions));
     app.use(express.json({ limit: process.env.REQUEST_LIMIT || '100kb' }));
     app.use(
       express.urlencoded({
