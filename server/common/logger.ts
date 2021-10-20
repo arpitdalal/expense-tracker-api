@@ -12,7 +12,7 @@ const root = path.normalize(__dirname + '/../..');
 
 let streams: Streams = [];
 
-if (process.env.ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   streams = [
     { stream: process.stdout },
     { stream: fs.createWriteStream(`${root}/.log`, { flags: 'a' }) },
