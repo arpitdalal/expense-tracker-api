@@ -35,7 +35,7 @@ paths:
                   example: test
                 expense:
                   type: string
-                  example: 40
+                  example: '40'
                 resSheetName:
                   type: string
                   example: Sheet1
@@ -78,7 +78,7 @@ paths:
                   example: test
                 expense:
                   type: string
-                  example: -40
+                  example: '-40'
                 resSheetName:
                   type: string
                   example: Sheet1
