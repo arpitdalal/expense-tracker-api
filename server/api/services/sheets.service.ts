@@ -26,7 +26,11 @@ export class SheetsService {
       });
     }
 
-    await sheet.addRow({ Title: title, Expense: expense });
+    await sheet.addRow({
+      Title: title,
+      Expense: expense,
+      Time: new Date().toLocaleDateString(),
+    });
 
     L.info(`create row with title ${title} and expense ${expense}`);
     return Promise.resolve({
