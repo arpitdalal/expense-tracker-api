@@ -60,6 +60,7 @@ export class SheetsService {
     const rows = await sheet.getRows();
     rows[id].Title = title || rows[id].Title;
     rows[id].Expense = expense || rows[id].Expense;
+    rows[id].UpdatedTime = new Date().toLocaleDateString();
     await rows[id].save();
 
     L.info(`update the row with id ${id}`);
