@@ -95,6 +95,49 @@ export class SheetsService {
       errors: [],
     });
   }
+
+  async createMonth(
+    sheetId: string,
+    resSheetName?: string
+  ): Promise<ReturnObject> {
+    const doc = await getSheetDoc(sheetId);
+
+    const { sheetName, ...data } = await getSheet(doc, resSheetName);
+    let sheet = data.sheet;
+
+    if (!sheet) {
+      sheet = await doc.addSheet({
+        title: sheetName,
+        headerValues: ['Title', 'Expense', 'CreatedAt', 'UpdatedAt'],
+      });
+    }
+
+    L.info(`create sheet with name ${resSheetName}`);
+    return Promise.resolve({
+      result: 'Ok',
+      errors: [],
+    });
+  }
+
+  async deleteMonth(
+    sheetId: string,
+    resSheetName?: string
+  ): Promise<ReturnObject> {
+    const doc = await getSheetDoc(sheetId);
+
+    const { ...data } = await getSheet(doc, resSheetName);
+    const sheet = data.sheet;
+
+    if (sheet) {
+      await doc.deleteSheet(sheet.sheetId);
+    }
+
+    L.info(`delete sheet with name ${resSheetName}`);
+    return Promise.resolve({
+      result: 'Ok',
+      errors: [],
+    });
+  }
 }
 
 export default new SheetsService();

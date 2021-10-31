@@ -55,5 +55,29 @@ export class Controller {
         res.status(500).send(e);
       });
   }
+
+  createMonth(req: Request, res: Response): void {
+    const { resSheetName }: createBody = req.body;
+    SheetsService.createMonth(req.params['sheetId'], resSheetName)
+      .then((r) => {
+        if (r.result !== '') res.status(201).send(r);
+        else res.status(404).send(r);
+      })
+      .catch((e) => {
+        res.status(500).send(e);
+      });
+  }
+
+  deleteMonth(req: Request, res: Response): void {
+    const { resSheetName }: createBody = req.body;
+    SheetsService.deleteMonth(req.params['sheetId'], resSheetName)
+      .then((r) => {
+        if (r.result !== '') res.status(200).send(r);
+        else res.status(404).send(r);
+      })
+      .catch((e) => {
+        res.status(500).send(e);
+      });
+  }
 }
 export default new Controller();

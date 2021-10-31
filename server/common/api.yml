@@ -16,7 +16,7 @@ paths:
       summary: Create a row
       tags:
         - Sheets
-      description: This operation needs correct Sheet Id int he url
+      description: This operation needs correct Sheet Id in the url
       parameters:
         - name: sheetId
           in: path
@@ -56,7 +56,7 @@ paths:
       summary: Update a row
       tags:
         - Sheets
-      description: This operation needs correct Sheet Id int he url
+      description: This operation needs correct Sheet Id in the url
       parameters:
         - name: sheetId
           in: path
@@ -99,7 +99,7 @@ paths:
       summary: Delete a row
       tags:
         - Sheets
-      description: This operation needs correct Sheet Id int he url
+      description: This operation needs correct Sheet Id in the url
       parameters:
         - name: sheetId
           in: path
@@ -123,6 +123,76 @@ paths:
       responses:
         200:
           description: Row deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseType'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /sheets/{sheetId}/add-month:
+    post:
+      summary: Create a sheet
+      tags:
+        - Sheets
+      description: This operation needs correct Sheet Id in the url
+      parameters:
+        - name: sheetId
+          in: path
+          required: true
+          description: Sheet id
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resSheetName:
+                  type: string
+                  example: Sheet1
+      responses:
+        201:
+          description: Sheet created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseType'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /sheets/{sheetId}/delete-month:
+    delete:
+      summary: Delete a sheet
+      tags:
+        - Sheets
+      description: This operation needs correct Sheet Id in the url
+      parameters:
+        - name: sheetId
+          in: path
+          required: true
+          description: Sheet id
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resSheetName:
+                  type: string
+                  example: Sheet1
+      responses:
+        200:
+          description: Sheet deleted
           content:
             application/json:
               schema:

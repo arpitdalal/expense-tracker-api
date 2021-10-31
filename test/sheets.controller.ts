@@ -50,4 +50,24 @@ describe('Sheets', () => {
       .then(() => done())
       .catch(done);
   });
+  it('should create a sheet', (done) => {
+    request(Server)
+      .post(`/api/v1/sheets/${sheetId}/add-month`)
+      .set('Accept', 'application/json')
+      .send({ resSheetName: 'TestSheet' })
+      .expect('Content-Type', /json/)
+      .expect(201)
+      .then(() => done())
+      .catch(done);
+  });
+  it('should delete a sheet', (done) => {
+    request(Server)
+      .delete(`/api/v1/sheets/${sheetId}/delete-month`)
+      .set('Accept', 'application/json')
+      .send({ resSheetName: 'TestSheet' })
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .then(() => done())
+      .catch(done);
+  });
 });
