@@ -31,16 +31,39 @@ export default class ExpressServer {
     app.use(express.text({ limit: process.env.REQUEST_LIMIT || '100kb' }));
     app.use(express.static(`${root}/public`));
 
-    const apiSpec = path.join(__dirname, 'api.yml');
+    const swaggerConfig = path.join(__dirname, './swagger-config.yml');
+    const apiSpecV1 = path.join(__dirname, '../api/v1/spec.yml');
+    const apiSpecV2 = path.join(__dirname, '../api/v2/spec.yml');
     const validateResponses = !!(
       process.env.OPENAPI_ENABLE_RESPONSE_VALIDATION &&
       process.env.OPENAPI_ENABLE_RESPONSE_VALIDATION.toLowerCase() === 'true'
     );
-    app.use(process.env.OPENAPI_SPEC || '/spec', express.static(apiSpec));
+    const validateRequests = !!(
+      process.env.OPENAPI_ENABLE_REQUEST_VALIDATION &&
+      process.env.OPENAPI_ENABLE_REQUEST_VALIDATION.toLowerCase() === 'true'
+    );
+    const validateApiSpec = !!(
+      process.env.OPENAPI_ENABLE_API_SPEC_VALIDATION &&
+      process.env.OPENAPI_ENABLE_API_SPEC_VALIDATION.toLowerCase() === 'true'
+    );
+    app.use('/swagger-config', express.static(swaggerConfig));
+    app.use('/api/v1/spec', express.static(apiSpecV1));
     app.use(
       OpenApiValidator.middleware({
-        apiSpec,
+        apiSpec: apiSpecV1,
         validateResponses,
+        validateRequests,
+        validateApiSpec,
+        ignorePaths: /.*\/spec(\/|$)/,
+      })
+    );
+    app.use('/api/v2/spec', express.static(apiSpecV2));
+    app.use(
+      OpenApiValidator.middleware({
+        apiSpec: apiSpecV2,
+        validateResponses,
+        validateRequests,
+        validateApiSpec,
         ignorePaths: /.*\/spec(\/|$)/,
       })
     );

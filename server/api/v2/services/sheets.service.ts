@@ -1,4 +1,4 @@
-import L from '../../common/logger';
+import L from '../../../common/logger';
 import { getSheet } from '../utils/getSheet';
 import { getSheetDoc } from '../utils/getSheetDoc';
 
@@ -8,13 +8,55 @@ type ReturnObject = {
 };
 
 export class SheetsService {
-  async create(
-    sheetId: string,
+  async createSheet(
+    docId: string,
+    resSheetName?: string
+  ): Promise<ReturnObject> {
+    const doc = await getSheetDoc(docId);
+
+    const { sheetName, ...data } = await getSheet(doc, resSheetName);
+    let sheet = data.sheet;
+
+    if (!sheet) {
+      sheet = await doc.addSheet({
+        title: sheetName,
+        headerValues: ['Title', 'Expense', 'CreatedAt', 'UpdatedAt'],
+      });
+    }
+
+    L.info(`create sheet with name ${resSheetName}`);
+    return Promise.resolve({
+      result: 'Ok',
+      errors: [],
+    });
+  }
+
+  async deleteSheet(
+    docId: string,
+    resSheetName?: string
+  ): Promise<ReturnObject> {
+    const doc = await getSheetDoc(docId);
+
+    const { ...data } = await getSheet(doc, resSheetName);
+    const sheet = data.sheet;
+
+    if (sheet) {
+      await doc.deleteSheet(sheet.sheetId);
+    }
+
+    L.info(`delete sheet with name ${resSheetName}`);
+    return Promise.resolve({
+      result: 'Ok',
+      errors: [],
+    });
+  }
+  async createRow(
+    docId: string,
     title: string,
     expense: string,
     resSheetName?: string
   ): Promise<ReturnObject> {
-    const doc = await getSheetDoc(sheetId);
+    const doc = await getSheetDoc(docId);
 
     const { sheetName, ...data } = await getSheet(doc, resSheetName);
     let sheet = data.sheet;
@@ -39,14 +81,14 @@ export class SheetsService {
     });
   }
 
-  async patch(
-    sheetId: string,
+  async updateRow(
+    docId: string,
     id: number,
     title?: string,
     expense?: string,
     resSheetName?: string
   ): Promise<ReturnObject> {
-    const doc = await getSheetDoc(sheetId);
+    const doc = await getSheetDoc(docId);
 
     const { sheet } = await getSheet(doc, resSheetName);
 
@@ -70,12 +112,12 @@ export class SheetsService {
     });
   }
 
-  async delete(
-    sheetId: string,
+  async deleteRow(
+    docId: string,
     id: number,
     resSheetName?: string
   ): Promise<ReturnObject> {
-    const doc = await getSheetDoc(sheetId);
+    const doc = await getSheetDoc(docId);
 
     const { sheet } = await getSheet(doc, resSheetName);
 
@@ -90,49 +132,6 @@ export class SheetsService {
     await rows[id].delete();
 
     L.info(`delete the row with id ${id}`);
-    return Promise.resolve({
-      result: 'Ok',
-      errors: [],
-    });
-  }
-
-  async createMonth(
-    sheetId: string,
-    resSheetName?: string
-  ): Promise<ReturnObject> {
-    const doc = await getSheetDoc(sheetId);
-
-    const { sheetName, ...data } = await getSheet(doc, resSheetName);
-    let sheet = data.sheet;
-
-    if (!sheet) {
-      sheet = await doc.addSheet({
-        title: sheetName,
-        headerValues: ['Title', 'Expense', 'CreatedAt', 'UpdatedAt'],
-      });
-    }
-
-    L.info(`create sheet with name ${resSheetName}`);
-    return Promise.resolve({
-      result: 'Ok',
-      errors: [],
-    });
-  }
-
-  async deleteMonth(
-    sheetId: string,
-    resSheetName?: string
-  ): Promise<ReturnObject> {
-    const doc = await getSheetDoc(sheetId);
-
-    const { ...data } = await getSheet(doc, resSheetName);
-    const sheet = data.sheet;
-
-    if (sheet) {
-      await doc.deleteSheet(sheet.sheetId);
-    }
-
-    L.info(`delete sheet with name ${resSheetName}`);
     return Promise.resolve({
       result: 'Ok',
       errors: [],
