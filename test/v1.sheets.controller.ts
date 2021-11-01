@@ -5,8 +5,8 @@ import Server from '../server';
 
 const sheetId = '120LwrLFrFqafIWEFno2hGUBFn-y7mGIL0A2MADfMo48';
 
-describe('Sheets', () => {
-  it('should insert a row', (done) => {
+describe('[v1] Sheets', () => {
+  it('[v1] should insert a row', (done) => {
     request(Server)
       .post(`/api/v1/sheets/${sheetId}`)
       .set('Accept', 'application/json')
@@ -16,7 +16,7 @@ describe('Sheets', () => {
       .then(() => done())
       .catch(done);
   });
-  it('should update a row with title and expense', (done) => {
+  it('[v1] should update a row with title and expense', (done) => {
     request(Server)
       .patch(`/api/v1/sheets/${sheetId}`)
       .send({ id: 0, title: 'test1', expense: '-40' })
@@ -24,7 +24,7 @@ describe('Sheets', () => {
       .then(() => done())
       .catch(done);
   });
-  it('should update a row with only title', (done) => {
+  it('[v1] should update a row with only title', (done) => {
     request(Server)
       .patch(`/api/v1/sheets/${sheetId}`)
       .send({ id: 0, title: 'test2' })
@@ -32,7 +32,7 @@ describe('Sheets', () => {
       .then(() => done())
       .catch(done);
   });
-  it('should update a row with only expense', (done) => {
+  it('[v1] should update a row with only expense', (done) => {
     request(Server)
       .patch(`/api/v1/sheets/${sheetId}`)
       .send({ id: 0, expense: '10' })
@@ -40,7 +40,7 @@ describe('Sheets', () => {
       .then(() => done())
       .catch(done);
   });
-  it('should delete a row', (done) => {
+  it('[v1] should delete a row', (done) => {
     request(Server)
       .delete(`/api/v1/sheets/${sheetId}`)
       .set('Accept', 'application/json')
@@ -50,7 +50,7 @@ describe('Sheets', () => {
       .then(() => done())
       .catch(done);
   });
-  it('should create a sheet', (done) => {
+  it('[v1] should create a sheet', (done) => {
     request(Server)
       .post(`/api/v1/sheets/${sheetId}/add-month`)
       .set('Accept', 'application/json')
@@ -60,7 +60,7 @@ describe('Sheets', () => {
       .then(() => done())
       .catch(done);
   });
-  it('should delete a sheet', (done) => {
+  it('[v1] should delete a sheet', (done) => {
     request(Server)
       .delete(`/api/v1/sheets/${sheetId}/delete-month`)
       .set('Accept', 'application/json')

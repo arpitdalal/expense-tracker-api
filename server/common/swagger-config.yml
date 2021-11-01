@@ -1,0 +1,6 @@
+urls:
+  - name: v1
+    url: /api/v1/spec
+  - name: v2
+    url: /api/v2/spec
+urls.primaryName: v2
