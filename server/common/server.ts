@@ -6,7 +6,7 @@ import cors, { CorsOptions } from 'cors';
 import * as OpenApiValidator from 'express-openapi-validator';
 
 import l from './logger';
-import errorHandler from '../api/middlewares/error.handler';
+import errorHandler from '../api/v1/middlewares/error.handler';
 
 const app = express();
 
