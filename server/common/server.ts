@@ -32,8 +32,8 @@ export default class ExpressServer {
     app.use(express.static(`${root}/public`));
 
     const swaggerConfig = path.join(__dirname, './swagger-config.yml');
-    const apiSpecV1 = path.join(__dirname, '../api/v1/spec.yml');
-    const apiSpecV2 = path.join(__dirname, '../api/v2/spec.yml');
+    const apiSpecV1 = path.join(__dirname, './v1.api.yml');
+    const apiSpecV2 = path.join(__dirname, './v2.api.yml');
     const validateResponses = !!(
       process.env.OPENAPI_ENABLE_RESPONSE_VALIDATION &&
       process.env.OPENAPI_ENABLE_RESPONSE_VALIDATION.toLowerCase() === 'true'
