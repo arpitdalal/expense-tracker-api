@@ -34,6 +34,8 @@ paths:
                 resSheetName:
                   type: string
                   example: Sheet1
+              required:
+                - resSheetName
       responses:
         201:
           description: Sheet created
@@ -69,6 +71,8 @@ paths:
                 resSheetName:
                   type: string
                   example: Sheet1
+              required:
+                - resSheetName
       responses:
         200:
           description: Sheet deleted
@@ -111,6 +115,9 @@ paths:
                 resSheetName:
                   type: string
                   example: Sheet1
+              required:
+                - title
+                - expense
       responses:
         201:
           description: Entry created
@@ -155,6 +162,8 @@ paths:
                 resSheetName:
                   type: string
                   example: Sheet1
+              required:
+                - id
       responses:
         200:
           description: Entry updated
@@ -194,6 +203,8 @@ paths:
                 resSheetName:
                   type: string
                   example: Sheet1
+              required:
+                - id
       responses:
         200:
           description: Entry deleted
