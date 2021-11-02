@@ -1,8 +1,6 @@
 import { GoogleSpreadsheet } from 'google-spreadsheet';
 
-export const getSheetDoc = async (
-  sheetId: string
-): Promise<GoogleSpreadsheet> => {
+export const getDoc = async (sheetId: string): Promise<GoogleSpreadsheet> => {
   // Initialize the sheet
   const doc: GoogleSpreadsheet = new GoogleSpreadsheet(sheetId);
 

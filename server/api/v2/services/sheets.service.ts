@@ -1,6 +1,6 @@
 import L from '../../../common/logger';
 import { getSheet } from '../utils/getSheet';
-import { getSheetDoc } from '../utils/getSheetDoc';
+import { getDoc } from '../utils/getDoc';
 
 type ReturnObject = {
   result: string;
@@ -12,7 +12,7 @@ export class SheetsService {
     docId: string,
     resSheetName?: string
   ): Promise<ReturnObject> {
-    const doc = await getSheetDoc(docId);
+    const doc = await getDoc(docId);
 
     const { sheetName, ...data } = await getSheet(doc, resSheetName);
     let sheet = data.sheet;
@@ -35,7 +35,7 @@ export class SheetsService {
     docId: string,
     resSheetName?: string
   ): Promise<ReturnObject> {
-    const doc = await getSheetDoc(docId);
+    const doc = await getDoc(docId);
 
     const { ...data } = await getSheet(doc, resSheetName);
     const sheet = data.sheet;
@@ -50,13 +50,14 @@ export class SheetsService {
       errors: [],
     });
   }
+
   async createRow(
     docId: string,
     title: string,
     expense: string,
     resSheetName?: string
   ): Promise<ReturnObject> {
-    const doc = await getSheetDoc(docId);
+    const doc = await getDoc(docId);
 
     const { sheetName, ...data } = await getSheet(doc, resSheetName);
     let sheet = data.sheet;
@@ -88,7 +89,7 @@ export class SheetsService {
     expense?: string,
     resSheetName?: string
   ): Promise<ReturnObject> {
-    const doc = await getSheetDoc(docId);
+    const doc = await getDoc(docId);
 
     const { sheet } = await getSheet(doc, resSheetName);
 
@@ -117,7 +118,7 @@ export class SheetsService {
     id: number,
     resSheetName?: string
   ): Promise<ReturnObject> {
-    const doc = await getSheetDoc(docId);
+    const doc = await getDoc(docId);
 
     const { sheet } = await getSheet(doc, resSheetName);
 
