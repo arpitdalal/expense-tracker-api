@@ -1,27 +1,35 @@
 import SheetsService from '../../services/sheets.service';
 import { Request, Response } from 'express';
 
-type createBody = {
+type createSheetBody = {
+  resSheetName: string;
+};
+
+type deleteSheetBody = {
+  resSheetName: string;
+};
+
+type createRowBody = {
   title: string;
   expense: string;
   resSheetName?: string;
 };
 
-type patchBody = {
+type patchRowBody = {
   id: number;
   title?: string;
   expense?: string;
   resSheetName?: string;
 };
 
-type deleteBody = {
+type deleteRowBody = {
   id: number;
   resSheetName?: string;
 };
 
 export class Controller {
   createSheet(req: Request, res: Response): void {
-    const { resSheetName }: createBody = req.body;
+    const { resSheetName }: createSheetBody = req.body;
     SheetsService.createSheet(req.params['docId'], resSheetName)
       .then((r) => {
         if (r.result !== '') res.status(201).send(r);
@@ -33,7 +41,7 @@ export class Controller {
   }
 
   deleteSheet(req: Request, res: Response): void {
-    const { resSheetName }: createBody = req.body;
+    const { resSheetName }: deleteSheetBody = req.body;
     SheetsService.deleteSheet(req.params['docId'], resSheetName)
       .then((r) => {
         if (r.result !== '') res.status(200).send(r);
@@ -45,7 +53,7 @@ export class Controller {
   }
 
   createRow(req: Request, res: Response): void {
-    const { title, expense, resSheetName }: createBody = req.body;
+    const { title, expense, resSheetName }: createRowBody = req.body;
     SheetsService.createRow(req.params['docId'], title, expense, resSheetName)
       .then((r) => {
         if (r.result !== '') res.status(201).send(r);
@@ -57,7 +65,7 @@ export class Controller {
   }
 
   updateRow(req: Request, res: Response): void {
-    const { id, title, expense, resSheetName }: patchBody = req.body;
+    const { id, title, expense, resSheetName }: patchRowBody = req.body;
     SheetsService.updateRow(
       req.params['docId'],
       id,
@@ -75,7 +83,7 @@ export class Controller {
   }
 
   deleteRow(req: Request, res: Response): void {
-    const { id, resSheetName }: deleteBody = req.body;
+    const { id, resSheetName }: deleteRowBody = req.body;
     SheetsService.deleteRow(req.params['docId'], id, resSheetName)
       .then((r) => {
         if (r.result !== '') res.status(200).send(r);
