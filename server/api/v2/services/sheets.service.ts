@@ -7,22 +7,19 @@ type ReturnObject = {
   errors: any[];
 };
 
+const headerValues = ['Title', 'Expense', 'CreatedAt', 'UpdatedAt'];
+
 export class SheetsService {
   async createSheet(
     docId: string,
-    resSheetName?: string
+    resSheetName: string
   ): Promise<ReturnObject> {
     const doc = await getDoc(docId);
 
-    const { sheetName, ...data } = await getSheet(doc, resSheetName);
-    let sheet = data.sheet;
-
-    if (!sheet) {
-      sheet = await doc.addSheet({
-        title: sheetName,
-        headerValues: ['Title', 'Expense', 'CreatedAt', 'UpdatedAt'],
-      });
-    }
+    await doc.addSheet({
+      title: resSheetName,
+      headerValues,
+    });
 
     L.info(`create sheet with name ${resSheetName}`);
     return Promise.resolve({
@@ -33,7 +30,7 @@ export class SheetsService {
 
   async deleteSheet(
     docId: string,
-    resSheetName?: string
+    resSheetName: string
   ): Promise<ReturnObject> {
     const doc = await getDoc(docId);
 
@@ -65,7 +62,7 @@ export class SheetsService {
     if (!sheet) {
       sheet = await doc.addSheet({
         title: sheetName,
-        headerValues: ['Title', 'Expense', 'CreatedAt', 'UpdatedAt'],
+        headerValues,
       });
     }
 
