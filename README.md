@@ -1,6 +1,6 @@
 # <p align=center>Expense Tracker Api</p>
 
-![Heroku](http://heroku-badge.herokuapp.com/?app=arpit-expense-tracker&style=flat&svg=1&root=index.html)
+![Heroku](http://heroku-badge.herokuapp.com/?app=arpit-expense-tracker&style=flat&svg=1&root=index.html) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/arpitdalal/expense-tracker-api)
 
 This is an expense tracking api which uses Google sheets as it's database.
 
