@@ -50,4 +50,37 @@ describe('[v2] Rows', () => {
       .then(() => done())
       .catch(done);
   });
+  it('[v2] should insert a preset row', (done) => {
+    request(Server)
+      .post(`/api/v2/sheets/${sheetId}/row`)
+      .set('Accept', 'application/json')
+      .send({
+        resSheetName: 'Presets',
+        title: 'Test',
+        expense: '40',
+        ShouldAddToNextMonth: '1',
+      })
+      .expect('Content-Type', /json/)
+      .expect(201)
+      .then(() => done())
+      .catch(done);
+  });
+  it('[v2] should update a preset row with only ShouldAddToNextMonth', (done) => {
+    request(Server)
+      .patch(`/api/v2/sheets/${sheetId}/row`)
+      .send({ resSheetName: 'Presets', id: 0, ShouldAddToNextMonth: '0' })
+      .expect(200)
+      .then(() => done())
+      .catch(done);
+  });
+  it('[v2] should delete a preset row', (done) => {
+    request(Server)
+      .delete(`/api/v2/sheets/${sheetId}/row`)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send({ resSheetName: 'Presets', id: 0 })
+      .expect(200)
+      .then(() => done())
+      .catch(done);
+  });
 });

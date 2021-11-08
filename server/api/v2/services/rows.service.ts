@@ -6,6 +6,13 @@ type ReturnObject = {
   result: string;
   errors: any[];
 };
+type Row = {
+  Title: string;
+  Expense: string;
+  CreatedAt: string;
+  UpdatedAt?: string;
+  ShouldAddToNextMonth?: string;
+};
 
 const headerValues = ['Title', 'Expense', 'CreatedAt', 'UpdatedAt'];
 
@@ -14,7 +21,8 @@ export class SheetsService {
     docId: string,
     title: string,
     expense: string,
-    resSheetName?: string
+    resSheetName?: string,
+    ShouldAddToNextMonth?: string
   ): Promise<ReturnObject> {
     const doc = await getDoc(docId);
 
@@ -28,11 +36,14 @@ export class SheetsService {
       });
     }
 
-    await sheet.addRow({
+    const payload: Row = {
       Title: title,
       Expense: expense,
       CreatedAt: new Date().toLocaleDateString(),
-    });
+      ShouldAddToNextMonth,
+    };
+
+    await sheet.addRow(payload);
 
     L.info(`create row with title ${title} and expense ${expense}`);
     return Promise.resolve({
@@ -46,7 +57,8 @@ export class SheetsService {
     id: number,
     title?: string,
     expense?: string,
-    resSheetName?: string
+    resSheetName?: string,
+    ShouldAddToNextMonth?: string
   ): Promise<ReturnObject> {
     const doc = await getDoc(docId);
 
@@ -62,6 +74,8 @@ export class SheetsService {
     const rows = await sheet.getRows();
     rows[id].Title = title || rows[id].Title;
     rows[id].Expense = expense || rows[id].Expense;
+    rows[id].ShouldAddToNextMonth =
+      ShouldAddToNextMonth || rows[id].ShouldAddToNextMonth;
     rows[id].UpdatedAt = new Date().toLocaleDateString();
     await rows[id].save();
 
