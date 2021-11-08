@@ -115,6 +115,9 @@ paths:
                 resSheetName:
                   type: string
                   example: Sheet1
+                ShouldAddToNextMonth:
+                  type: string
+                  example: '0'
               required:
                 - title
                 - expense
@@ -162,6 +165,9 @@ paths:
                 resSheetName:
                   type: string
                   example: Sheet1
+                ShouldAddToNextMonth:
+                  type: string
+                  example: '1'
               required:
                 - id
       responses:

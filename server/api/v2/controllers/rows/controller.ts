@@ -5,6 +5,7 @@ type createRowBody = {
   title: string;
   expense: string;
   resSheetName?: string;
+  ShouldAddToNextMonth?: string;
 };
 
 type patchRowBody = {
@@ -12,6 +13,7 @@ type patchRowBody = {
   title?: string;
   expense?: string;
   resSheetName?: string;
+  ShouldAddToNextMonth?: string;
 };
 
 type deleteRowBody = {
@@ -21,8 +23,19 @@ type deleteRowBody = {
 
 export class Controller {
   createRow(req: Request, res: Response): void {
-    const { title, expense, resSheetName }: createRowBody = req.body;
-    RowsService.createRow(req.params['docId'], title, expense, resSheetName)
+    const {
+      title,
+      expense,
+      resSheetName,
+      ShouldAddToNextMonth,
+    }: createRowBody = req.body;
+    RowsService.createRow(
+      req.params['docId'],
+      title,
+      expense,
+      resSheetName,
+      ShouldAddToNextMonth
+    )
       .then((r) => {
         if (r.result !== '') res.status(201).send(r);
         else res.status(404).send(r);
@@ -33,8 +46,21 @@ export class Controller {
   }
 
   updateRow(req: Request, res: Response): void {
-    const { id, title, expense, resSheetName }: patchRowBody = req.body;
-    RowsService.updateRow(req.params['docId'], id, title, expense, resSheetName)
+    const {
+      id,
+      title,
+      expense,
+      resSheetName,
+      ShouldAddToNextMonth,
+    }: patchRowBody = req.body;
+    RowsService.updateRow(
+      req.params['docId'],
+      id,
+      title,
+      expense,
+      resSheetName,
+      ShouldAddToNextMonth
+    )
       .then((r) => {
         if (r.result !== '') res.status(200).send(r);
         else res.status(404).send(r);
