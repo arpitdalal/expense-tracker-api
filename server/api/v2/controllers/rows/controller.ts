@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 type createRowBody = {
   title: string;
   expense: string;
+  file?: string;
   resSheetName?: string;
   ShouldAddToNextMonth?: string;
 };
@@ -26,6 +27,7 @@ export class Controller {
     const {
       title,
       expense,
+      file,
       resSheetName,
       ShouldAddToNextMonth,
     }: createRowBody = req.body;
@@ -33,6 +35,7 @@ export class Controller {
       req.params['docId'],
       title,
       expense,
+      file,
       resSheetName,
       ShouldAddToNextMonth
     )

@@ -9,18 +9,20 @@ type ReturnObject = {
 type Row = {
   Title: string;
   Expense: string;
+  File?: string;
   CreatedAt: string;
   UpdatedAt?: string;
   ShouldAddToNextMonth?: string;
 };
 
-const headerValues = ['Title', 'Expense', 'CreatedAt', 'UpdatedAt'];
+const headerValues = ['Title', 'Expense', 'File', 'CreatedAt', 'UpdatedAt'];
 
 export class SheetsService {
   async createRow(
     docId: string,
     title: string,
     expense: string,
+    file = '',
     resSheetName?: string,
     ShouldAddToNextMonth?: string
   ): Promise<ReturnObject> {
@@ -39,6 +41,7 @@ export class SheetsService {
     const payload: Row = {
       Title: title,
       Expense: expense,
+      File: file,
       CreatedAt: new Date().toLocaleDateString(),
       ShouldAddToNextMonth,
     };

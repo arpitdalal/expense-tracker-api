@@ -112,6 +112,9 @@ paths:
                 expense:
                   type: string
                   example: '40'
+                file:
+                  type: string
+                  example: 'data:image/jpeg;base64'
                 resSheetName:
                   type: string
                   example: Sheet1
