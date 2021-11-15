@@ -130,7 +130,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResponseType'
+                $ref: '#/components/schemas/CreatedResponseType'
         500:
           description: Internal Server Error
           content:
@@ -268,4 +268,40 @@ components:
             type: string
       example:
         - { result: 'Ok', errors: [] }
+        - { result: '', errors: ['Something went wrong.'] }
+    CreatedResponseType:
+      title: Created Response Type
+      type: object
+      properties:
+        result:
+          type: string
+        payload:
+          type: object
+          properties:
+            Title:
+              type: string
+            Expense:
+              type: string
+            File:
+              type: string
+            CreatedAt:
+              type: string
+            ShouldAddToNextMonth:
+              type: string
+        errors:
+          type: array
+          items:
+            type: string
+      example:
+        - {
+            result: 'Ok',
+            payload:
+              {
+                Title: 'test',
+                expense: '40',
+                file: 'kt.imagekit.io/expense-tracker/hello.jpg',
+                ShouldAddToNextMonth: '0',
+              },
+            errors: [],
+          }
         - { result: '', errors: ['Something went wrong.'] }
