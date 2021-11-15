@@ -1,6 +1,7 @@
 import L from '../../../common/logger';
 import { getSheet } from '../utils/getSheet';
 import { getDoc } from '../utils/getDoc';
+import ImageKit from 'imagekit';
 
 type ReturnObject = {
   result: string;
@@ -17,16 +18,23 @@ type Row = {
 
 const headerValues = ['Title', 'Expense', 'File', 'CreatedAt', 'UpdatedAt'];
 
+const imagekit = new ImageKit({
+  publicKey: 'public_7eoqu13DFQ4xKANGBpaKxrwk6W8=',
+  privateKey: 'private_g2MqDfsanbhlNonhHPUBUDrqF/o=',
+  urlEndpoint: 'https://ik.imagekit.io/arpitdalal',
+});
+
 export class SheetsService {
   async createRow(
     docId: string,
     title: string,
     expense: string,
-    file = '',
+    file?: string,
     resSheetName?: string,
     ShouldAddToNextMonth?: string
   ): Promise<ReturnObject> {
     const doc = await getDoc(docId);
+    let fileUrl = '';
 
     const { sheetName, ...data } = await getSheet(doc, resSheetName);
     let sheet = data.sheet;
@@ -38,10 +46,19 @@ export class SheetsService {
       });
     }
 
+    if (file) {
+      const response = await imagekit.upload({
+        file,
+        fileName: title,
+        folder: 'expense-tracker',
+      });
+      fileUrl = response.url;
+    }
+
     const payload: Row = {
       Title: title,
       Expense: expense,
-      File: file,
+      File: fileUrl,
       CreatedAt: new Date().toLocaleDateString(),
       ShouldAddToNextMonth,
     };
