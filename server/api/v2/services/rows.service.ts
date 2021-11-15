@@ -18,10 +18,10 @@ type Row = {
 
 const headerValues = ['Title', 'Expense', 'File', 'CreatedAt', 'UpdatedAt'];
 
-const imagekit = new ImageKit({
-  publicKey: 'public_7eoqu13DFQ4xKANGBpaKxrwk6W8=',
-  privateKey: 'private_g2MqDfsanbhlNonhHPUBUDrqF/o=',
-  urlEndpoint: 'https://ik.imagekit.io/arpitdalal',
+export const imagekit = new ImageKit({
+  publicKey: process.env.IMAGE_KIT_PUB_KEY ?? '',
+  privateKey: process.env.IMAGE_KIT_PRIVATE_KEY ?? '',
+  urlEndpoint: process.env.IMAGE_KIT_ENDURL ?? '',
 });
 
 export class SheetsService {
@@ -68,6 +68,7 @@ export class SheetsService {
     L.info(`create row with title ${title} and expense ${expense}`);
     return Promise.resolve({
       result: 'Ok',
+      payload,
       errors: [],
     });
   }
