@@ -1,7 +1,11 @@
 import L from '../../../common/logger';
 import { getSheet } from '../utils/getSheet';
 import { getDoc } from '../utils/getDoc';
-import ImageKit from 'imagekit';
+import { addImage, deleteImage, getImages } from '../utils/imageKit';
+import {
+  ListFileResponse,
+  UploadResponse,
+} from 'imagekit/dist/libs/interfaces';
 
 type ReturnObject = {
   result: string;
@@ -17,13 +21,6 @@ type Row = {
 };
 
 const headerValues = ['Title', 'Expense', 'File', 'CreatedAt', 'UpdatedAt'];
-
-export const imagekit = new ImageKit({
-  publicKey: process.env.IMAGE_KIT_PUB_KEY ?? '',
-  privateKey: process.env.IMAGE_KIT_PRIVATE_KEY ?? '',
-  urlEndpoint: process.env.IMAGE_KIT_ENDURL ?? '',
-});
-
 export class SheetsService {
   async createRow(
     docId: string,
@@ -47,12 +44,19 @@ export class SheetsService {
     }
 
     if (file) {
-      const response = await imagekit.upload({
+      const response = await addImage(
         file,
-        fileName: title,
-        folder: 'expense-tracker',
-      });
-      fileUrl = response.url;
+        `${title}-${expense}`,
+        'expense-tracker',
+        `${title}, ${expense}`
+      );
+      if (!(response as UploadResponse).url) {
+        return Promise.reject({
+          result: '',
+          errors: ['Something went wrong'],
+        });
+      }
+      fileUrl = (response as UploadResponse).url;
     }
 
     const payload: Row = {
@@ -78,10 +82,13 @@ export class SheetsService {
     id: number,
     title?: string,
     expense?: string,
+    file?: string,
     resSheetName?: string,
     ShouldAddToNextMonth?: string
   ): Promise<ReturnObject> {
     const doc = await getDoc(docId);
+    let fileId = '';
+    let fileUrl = '';
 
     const { sheet } = await getSheet(doc, resSheetName);
 
@@ -93,12 +100,43 @@ export class SheetsService {
     }
 
     const rows = await sheet.getRows();
-    rows[id].Title = title || rows[id].Title;
-    rows[id].Expense = expense || rows[id].Expense;
-    rows[id].ShouldAddToNextMonth =
-      ShouldAddToNextMonth || rows[id].ShouldAddToNextMonth;
-    rows[id].UpdatedAt = new Date().toLocaleDateString();
-    await rows[id].save();
+    const row = rows[id];
+
+    if (file) {
+      const response = await getImages(`${row.Title}, ${row.Expense}`);
+      if (!(response as ListFileResponse[])[0].url) {
+        return Promise.reject({
+          result: '',
+          errors: ['Something went wrong'],
+        });
+      }
+      fileId = (response as ListFileResponse[])[0].fileId;
+    }
+
+    if (fileId && file) {
+      await deleteImage(fileId);
+
+      const response = await addImage(
+        file,
+        `${title || row.Title}-${expense || row.Expense}`,
+        'expense-tracker',
+        `${title || row.Title}, ${expense || row.Expense}`
+      );
+      if (!(response as UploadResponse).url) {
+        return Promise.reject({
+          result: '',
+          errors: ['Something went wrong'],
+        });
+      }
+      fileUrl = (response as UploadResponse).url;
+    }
+
+    row.Title = title || row.Title;
+    row.Expense = expense || row.Expense;
+    row.File = fileUrl || row.File;
+    row.ShouldAddToNextMonth = ShouldAddToNextMonth || row.ShouldAddToNextMonth;
+    row.UpdatedAt = new Date().toLocaleDateString();
+    await row.save();
 
     L.info(`update the row with id ${id}`);
     return Promise.resolve({
@@ -113,6 +151,7 @@ export class SheetsService {
     resSheetName?: string
   ): Promise<ReturnObject> {
     const doc = await getDoc(docId);
+    let fileId = '';
 
     const { sheet } = await getSheet(doc, resSheetName);
 
@@ -124,7 +163,26 @@ export class SheetsService {
     }
 
     const rows = await sheet.getRows();
-    await rows[id].delete();
+    const row = rows[id];
+
+    const response = await getImages(`${row.Title}, ${row.Expense}`);
+    if (!(response as ListFileResponse[])[0].url) {
+      return Promise.reject({
+        result: '',
+        errors: ['Something went wrong'],
+      });
+    }
+    fileId = (response as ListFileResponse[])[0].fileId;
+
+    if (!fileId) {
+      return Promise.reject({
+        result: '',
+        errors: ['Something went wrong'],
+      });
+    }
+    await deleteImage(fileId);
+
+    await row.delete();
 
     L.info(`delete the row with id ${id}`);
     return Promise.resolve({

@@ -13,6 +13,7 @@ type patchRowBody = {
   id: number;
   title?: string;
   expense?: string;
+  file?: string;
   resSheetName?: string;
   ShouldAddToNextMonth?: string;
 };
@@ -53,6 +54,7 @@ export class Controller {
       id,
       title,
       expense,
+      file,
       resSheetName,
       ShouldAddToNextMonth,
     }: patchRowBody = req.body;
@@ -61,6 +63,7 @@ export class Controller {
       id,
       title,
       expense,
+      file,
       resSheetName,
       ShouldAddToNextMonth
     )

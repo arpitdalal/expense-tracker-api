@@ -165,6 +165,9 @@ paths:
                 expense:
                   type: string
                   example: '-40'
+                file:
+                  type: string
+                  example: 'data:image/jpeg;base64'
                 resSheetName:
                   type: string
                   example: Sheet1
@@ -299,7 +302,7 @@ components:
               {
                 Title: 'test',
                 expense: '40',
-                file: 'kt.imagekit.io/expense-tracker/hello.jpg',
+                file: 'ik.imagekit.io/arpitdalal/expense-tracker/hello.jpg',
                 ShouldAddToNextMonth: '0',
               },
             errors: [],
