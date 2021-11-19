@@ -104,7 +104,7 @@ export class SheetsService {
 
     if (file) {
       const response = await getImages(`${row.Title}, ${row.Expense}`);
-      if (!(response as ListFileResponse[])[0].url) {
+      if (!(response as ListFileResponse[])[0]) {
         return Promise.reject({
           result: '',
           errors: ['Something went wrong'],
@@ -165,22 +165,24 @@ export class SheetsService {
     const rows = await sheet.getRows();
     const row = rows[id];
 
-    const response = await getImages(`${row.Title}, ${row.Expense}`);
-    if (!(response as ListFileResponse[])[0].url) {
-      return Promise.reject({
-        result: '',
-        errors: ['Something went wrong'],
-      });
-    }
-    fileId = (response as ListFileResponse[])[0].fileId;
+    if (row.File) {
+      const response = await getImages(`${row.Title}, ${row.Expense}`);
+      if (!(response as ListFileResponse[])[0]) {
+        return Promise.reject({
+          result: '',
+          errors: ['Something went wrong'],
+        });
+      }
+      fileId = (response as ListFileResponse[])[0].fileId;
 
-    if (!fileId) {
-      return Promise.reject({
-        result: '',
-        errors: ['Something went wrong'],
-      });
+      if (!fileId) {
+        return Promise.reject({
+          result: '',
+          errors: ['Something went wrong'],
+        });
+      }
+      await deleteImage(fileId);
     }
-    await deleteImage(fileId);
 
     await row.delete();
 
